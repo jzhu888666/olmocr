@@ -10,6 +10,11 @@ services:
     volumes:
       - ./input_pdfs:/data/pdfs
       - ./workspace:/data/workspace
+    # 暴露sglang服务端口
+    ports:
+      - "30024:30024"
+    # 使用主机网络模式，避免网络问题
+    network_mode: "host"
     # 使用GPU资源
     deploy:
       resources:
@@ -22,4 +27,5 @@ services:
     command: ["/data/workspace", "--pdfs", "/data/pdfs/*.pdf"]
     # 可选：添加环境变量
     environment:
-      - PYTHONUNBUFFERED=1 
+      - PYTHONUNBUFFERED=1
+      - SGLANG_ENABLE_CUDA=1 

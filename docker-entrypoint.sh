@@ -1,6 +1,27 @@
 #!/bin/bash
 set -e
 
+# 启动sglang服务
+echo "启动sglang服务..."
+python -m sglang.launch_server --host 0.0.0.0 --port 30024 &
+SGLANG_PID=$!
+
+# 等待sglang服务启动
+echo "等待sglang服务启动..."
+for i in {1..30}; do
+  if curl -s "http://localhost:30024/v1/models" >/dev/null 2>&1; then
+    echo "sglang服务已启动"
+    break
+  fi
+  
+  if [ $i -eq 30 ]; then
+    echo "sglang服务启动超时，继续执行..."
+  fi
+  
+  echo "等待sglang服务启动 ($i/30)..."
+  sleep 1
+done
+
 # 检查是否包含通配符
 if [[ "$@" == *"*.pdf"* ]]; then
   # 获取所有参数
