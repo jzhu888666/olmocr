@@ -39,6 +39,10 @@ RUN mkdir -p /data/workspace
 # 设置环境变量
 ENV PYTHONPATH=/app
 
+# 复制并设置入口点脚本
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 # 设置容器入口命令
-ENTRYPOINT ["python", "-m", "olmocr.pipeline"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["/data/workspace", "--help"] 
