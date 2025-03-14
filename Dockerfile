@@ -2,6 +2,9 @@ FROM nvidia/cuda:12.4.0-devel-ubuntu22.04
 
 WORKDIR /app
 
+# 预先接受Microsoft字体的EULA许可
+RUN echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula boolean true" | debconf-set-selections
+
 # 安装系统依赖
 RUN apt-get update && apt-get install -y \
     python3.11 \
